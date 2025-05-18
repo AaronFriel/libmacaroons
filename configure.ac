@@ -27,16 +27,11 @@ AM_CONDITIONAL([MAKE_NO_PRINT_DIRECTORY], [test x"${make_no_print}" != x])
 
 ANAL_WARNINGS
 
-dnl Testing presence of pkg-config
-AC_MSG_CHECKING([pkg-config m4 macros])
-if test m4_ifdef([PKG_CHECK_MODULES], [yes], [no]) == yes; then
-	AC_MSG_RESULT([yes]);
-else
-	AC_MSG_RESULT([no]);
-	AC_MSG_ERROR([
-pkg-config is required.
-See pkg-config.freedesktop.org])
-fi
+dnl -- Require the pkg-config tool and its macros
+m4_ifndef([PKG_PROG_PKG_CONFIG],
+  [m4_fatal([pkg-config’s pkg.m4 is missing; install pkg-config or copy pkg.m4 into the m4/ directory])])
+
+PKG_PROG_PKG_CONFIG            dnl finds/validates the binary
 
 # Checks for libraries.
 AC_CHECK_FUNC([strlcpy],[BSDLIB=],[BSDLIB=-lbsd])
